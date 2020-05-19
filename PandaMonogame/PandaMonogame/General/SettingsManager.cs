@@ -125,6 +125,9 @@ namespace PandaMonogame
                     xSetting.SetAttributeValue("Name", setting.Value.Name);
                     xSetting.SetAttributeValue("Value", setting.Value.Value);
 
+                    foreach (var kvp in setting.Value.OtherAttributes)
+                        xSetting.SetAttributeValue(kvp.Key, kvp.Value);
+
                     xSection.Add(xSetting);
                 } // foreach
 
