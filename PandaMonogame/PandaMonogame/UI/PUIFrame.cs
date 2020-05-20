@@ -372,7 +372,8 @@ namespace PandaMonogame.UI
         {
             var pointInFrame = PointInsideFrame(mousePosition);
 
-            Focused = pointInFrame;
+            if (Focused && !pointInFrame)
+                UnFocus();
 
             if (Draggable && (_draggableRect.IsEmpty ? pointInFrame : PointInsideDraggableRect(mousePosition)) && !_dragging)
             {
@@ -389,7 +390,8 @@ namespace PandaMonogame.UI
         {
             var pointInFrame = PointInsideFrame(mousePosition);
 
-            Focused = pointInFrame;
+            if (Focused && !pointInFrame)
+                UnFocus();
             
             if (_dragging)
                 _dragging = false;

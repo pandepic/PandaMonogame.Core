@@ -14,6 +14,7 @@ namespace PandaMonogame
         protected T[] _objects;
         protected bool _disposable = false;
 
+        public T[] Objects { get => _objects; }
         public int Size { get => _objects.Length; }
 
         public T this[int index]
@@ -40,6 +41,12 @@ namespace PandaMonogame
                     ((IDisposable)_objects[i])?.Dispose();
                 }
             }
+        }
+
+        public void Clear()
+        {
+            for (var i = 0; i < _objects.Length; i++)
+                Delete(i);
         }
 
         public void Delete(int poolIndex)
