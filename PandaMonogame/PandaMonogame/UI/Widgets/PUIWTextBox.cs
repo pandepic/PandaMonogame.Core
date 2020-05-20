@@ -181,7 +181,7 @@ namespace PandaMonogame.UI
         {
             if (!Focused && PointInsideWidget(mousePosition))
                 GrabFocus();
-            else
+            else if (Focused)
                 DropFocus();
         }
 
