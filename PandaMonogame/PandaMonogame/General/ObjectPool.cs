@@ -10,6 +10,7 @@ namespace PandaMonogame
     public class ObjectPool<T> where T : IPoolable, new()
     {
         public const int DefaultPoolSize = 100;
+        public const int MaxGrowthLimit = int.MaxValue / 4;
 
         protected T[] _objects;
         protected bool _disposable = false;
@@ -86,6 +87,9 @@ namespace PandaMonogame
 
         protected void AddObjects(int count)
         {
+            if (count > MaxGrowthLimit)
+                count = MaxGrowthLimit;
+
             var newIndex = Size;
 
             Array.Resize(ref _objects, Size + count);
