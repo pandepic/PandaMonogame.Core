@@ -22,6 +22,11 @@ namespace PandaMonogame
         public int Type { get; set; }
         public string AssetName { get; set; }
 
+        ~SoundEffectPlaying()
+        {
+            _instance?.Dispose();
+        }
+
         public SoundEffectPlaying(string assetName, bool looping, int type, float volume, float pitch = 0f, float pan = 0f)
         {
             var sfx = ModManager.Instance.AssetManager.LoadSoundEffect(assetName);
@@ -30,7 +35,7 @@ namespace PandaMonogame
             _instance.Volume = volume;
             _instance.Pitch = pitch;
             _instance.Pan = pan;
-            
+
             Looping = looping;
             Type = type;
             AssetName = assetName;

@@ -16,6 +16,7 @@ namespace PandaMonogame.Particles
         public ParticleEmitter(ParticleManager parent)
         {
             _parent = parent;
+            ParticlePool = new ObjectPool<Particle>(5000);
         }
 
         public virtual void Update(GameTime gameTime)

@@ -53,11 +53,11 @@ namespace PandaMonogame
         
         public Matrix GetViewMatrix(float z = 0f)
         {
-            return  Matrix.CreateTranslation(new Vector3(-_position, z)) *
-                    Matrix.CreateTranslation(new Vector3(-_origin, z)) *
-                    Matrix.CreateRotationZ(Rotation) *
+            return  Matrix.CreateTranslation(new Vector3(-_origin, z)) *
                     Matrix.CreateScale(Zoom, Zoom, 1) *
-                    Matrix.CreateTranslation(new Vector3(_origin, z));
+                    Matrix.CreateRotationZ(Rotation) *
+                    Matrix.CreateTranslation(new Vector3(_origin, z)) *
+                    Matrix.CreateTranslation(new Vector3(-_position, z));
         }
 
         public Vector2 GetPosition()

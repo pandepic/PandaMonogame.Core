@@ -18,12 +18,14 @@ namespace PandaMonogame
         public T[] Objects { get => _objects; }
         public int Size { get => _objects.Length; }
 
+        public bool AllowResize { get; set; }
+
         public T this[int index]
         {
             get => _objects[index];
         }
 
-        public ObjectPool(int size = DefaultPoolSize)
+        public ObjectPool(int size = DefaultPoolSize, bool allowResize = false)
         {
             _objects = new T[0];
 
@@ -74,7 +76,7 @@ namespace PandaMonogame
                 }
             }
 
-            if (resize)
+            if (resize && AllowResize)
             {
                 var currentSize = Size;
                 var newSize = currentSize * 2;
