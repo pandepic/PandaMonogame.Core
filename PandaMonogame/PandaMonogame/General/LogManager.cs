@@ -45,7 +45,7 @@ namespace PandaMonogame
 
             Console.SetOut(writer);
 
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Log file created on " + DateTime.Now.ToString());
         }
     }

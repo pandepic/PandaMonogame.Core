@@ -135,13 +135,13 @@ namespace PandaMonogame
 
         public void ImportAssets()
         {
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Importing mods");
 
             foreach (var mod in _loadedMods.Where(m => m.Ignore == false))
             {
                 _assetManager.Import(_modDirectory + "\\" + mod.Name + "\\" + _assetsFileName, _modDirectory + "\\" + mod.Name);
-                if (PandaMonogameConfig.logging)
+                if (PandaMonogameConfig.Logging)
                     Console.WriteLine("Mod imported: " + mod.Name);
             } // foreach
         } // importAssets

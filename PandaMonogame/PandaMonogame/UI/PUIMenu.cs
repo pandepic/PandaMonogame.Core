@@ -124,7 +124,7 @@ namespace PandaMonogame.UI
 
         public void Load(GraphicsDevice graphics, string assetName, string templatesName = "")
         {
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Importing UI instance: " + assetName);
 
             XDocument doc = XDocument.Load(ModManager.Instance.AssetManager.GetAssetPath(assetName));
@@ -148,7 +148,7 @@ namespace PandaMonogame.UI
             foreach (var fontElement in fontElements)
             {
                 _fonts.Add(fontElement.Attribute("AssetName").Value, ModManager.Instance.AssetManager.LoadDynamicSpriteFont(fontElement.Attribute("AssetName").Value));
-                if (PandaMonogameConfig.logging)
+                if (PandaMonogameConfig.Logging)
                     Console.WriteLine("New font: " + fontElement.Attribute("AssetName").Value);
             }
 
@@ -182,7 +182,7 @@ namespace PandaMonogame.UI
                     Filepath = ModManager.Instance.AssetManager.GetAssetPath(script.Element("AssetName").Value),
                 };
 
-                if (PandaMonogameConfig.logging)
+                if (PandaMonogameConfig.Logging)
                     Console.WriteLine("New script: " + newScript.Name + " - " + newScript.Filepath);
 
                 List<XElement> scriptClasses = script.Elements("Class").ToList();
@@ -216,7 +216,7 @@ namespace PandaMonogame.UI
                 Scripts.Add(newScript.Name, newScript);
             } // foreach
 
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Finished importing UI instance: " + assetName);
         } // load
 

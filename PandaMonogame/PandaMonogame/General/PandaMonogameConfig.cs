@@ -9,8 +9,9 @@ namespace PandaMonogame
 {
     public static class PandaMonogameConfig
     {
-        public static bool logging = false;
-        public static int uiSoundType = -1;
+        public static bool Logging = false;
+        public static int UISoundType = -1;
+
         public static Dictionary<Type, string> UIWidgetTypes { get; set; } = new Dictionary<Type, string>()
         {
             { typeof(PUIWBasicButton), "Button" },

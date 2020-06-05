@@ -35,7 +35,7 @@ namespace PandaMonogame
             _instance.Volume = volume;
             _instance.Pitch = pitch;
             _instance.Pan = pan;
-
+            
             Looping = looping;
             Type = type;
             AssetName = assetName;

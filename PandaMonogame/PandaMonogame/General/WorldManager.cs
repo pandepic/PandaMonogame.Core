@@ -114,11 +114,11 @@ namespace PandaMonogame.WorldManager2DTile
 
                 Tilesheets.Add(newSheet.Name, newSheet);
 
-                if (PandaMonogameConfig.logging)
+                if (PandaMonogameConfig.Logging)
                     Console.WriteLine("Loaded tilesheet " + newSheet.Name + " with " + newSheet.Tiles.Count.ToString() + " tiles.");
             } // foreach
 
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("WorldManager loaded tilesheets from tilesheets.xml");
         } // load
 
@@ -136,7 +136,7 @@ namespace PandaMonogame.WorldManager2DTile
 
             dynamic result = compiled.Execute(scope);
 
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("WorldManager generated world from Asset " + scriptAssetName);
         } // generate
     } // WorldManager

@@ -132,7 +132,7 @@ namespace PandaMonogame.UI
                 HandleEvents?.Invoke(_onClick);
 
                 if (!string.IsNullOrWhiteSpace(_clickSound))
-                    ModManager.Instance.SoundManager.PlaySound(_clickSound, PandaMonogameConfig.uiSoundType, false);
+                    ModManager.Instance.SoundManager.PlaySound(_clickSound, PandaMonogameConfig.UISoundType, false);
 
                 _buttonPressed = false;
             }

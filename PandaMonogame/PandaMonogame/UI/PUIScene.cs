@@ -37,7 +37,7 @@ namespace PandaMonogame.UI
             Active = sceneActive;
             Name = el.Attribute("Name").Value;
 
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("New scene: " + Name + " [active:" + Active.ToString() + "] [visible:" + Visible.ToString() + "]");
         }
 

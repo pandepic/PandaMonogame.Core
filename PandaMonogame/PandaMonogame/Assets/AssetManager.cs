@@ -38,7 +38,7 @@ namespace PandaMonogame
 
         public void Import(string filepath, string modPath = "")
         {
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Importing assets: " + filepath);
 
             XDocument doc = XDocument.Load(filepath);
@@ -53,12 +53,12 @@ namespace PandaMonogame
                 if (_assets.ContainsKey(assetName) == false)
                 {
                     _assets.Add(assetName, new Asset() { Name = assetName, Filepath = assetPath });
-                    if (PandaMonogameConfig.logging)
+                    if (PandaMonogameConfig.Logging)
                         Console.WriteLine("Asset imported: " + assetName + " - " + assetPath);
                 }
             }
 
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Finished importing assets: " + filepath);
         }
 

@@ -316,7 +316,7 @@ namespace PandaMonogame.UI
             Visible = (GetXMLAttribute("Visible") != null ? Convert.ToBoolean(GetXMLAttribute("Visible").Value) : true);
             Active = (GetXMLAttribute("Active") != null ? Convert.ToBoolean(GetXMLAttribute("Active").Value) : true);
 
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("New widget [type:" + this.GetType().Name + "] [active:" + Active + "] [visible:" + Visible + "]");
         } // loadStandardXML
 

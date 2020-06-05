@@ -200,7 +200,7 @@ namespace PandaMonogame.UI
 
             Name = el.Attribute("Name").Value;
             
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("New frame: " + Name);
 
             XElement widgetsRoot = el.Element("Widgets");

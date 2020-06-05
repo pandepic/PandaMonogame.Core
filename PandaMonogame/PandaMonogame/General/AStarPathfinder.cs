@@ -154,7 +154,7 @@ namespace PandaMonogame
             }
             catch (Exception e)
             {
-                if (PandaMonogameConfig.logging)
+                if (PandaMonogameConfig.Logging)
                     Console.WriteLine("Pathfinder error: " + e.Message);
                 return null;
             }

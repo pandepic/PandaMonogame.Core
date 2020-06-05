@@ -141,7 +141,7 @@ namespace PandaMonogame
             }
             catch (Exception e)
             {
-                if (PandaMonogameConfig.logging)
+                if (PandaMonogameConfig.Logging)
                     Console.WriteLine("Error drawing sprite: " + e.Message);
             }
         }

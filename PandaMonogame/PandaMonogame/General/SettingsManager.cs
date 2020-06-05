@@ -54,7 +54,7 @@ namespace PandaMonogame
 
         public void Load(string filepath)
         {
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Importing settings: " + filepath);
 
             Sections.Clear();
@@ -71,7 +71,7 @@ namespace PandaMonogame
                     Name = docSection.Attribute("Name").Value
                 };
 
-                if (PandaMonogameConfig.logging)
+                if (PandaMonogameConfig.Logging)
                     Console.WriteLine("Settings section [" + section.Name +"]");
 
                 List<XElement> sectionSettings = docSection.Elements("Setting").ToList();
@@ -93,7 +93,7 @@ namespace PandaMonogame
 
                     section.Settings.Add(sectionSetting.Attribute("Name").Value, newSetting);
 
-                    if (PandaMonogameConfig.logging)
+                    if (PandaMonogameConfig.Logging)
                         Console.WriteLine("[" + section.Name + "] Setting added: " + newSetting.Name + " - " + newSetting.Value);
                 } // foreach
 
@@ -101,13 +101,13 @@ namespace PandaMonogame
 
             } // foreach
 
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Finished importing settings: " + filepath);
         } // load
 
         public void Save(string filepath)
         {
-            if (PandaMonogameConfig.logging)
+            if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Saving settings: " + filepath);
 
             XDocument doc = new XDocument();
