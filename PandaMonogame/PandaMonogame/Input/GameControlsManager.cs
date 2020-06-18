@@ -48,6 +48,31 @@ namespace PandaMonogame
             _keyboardControls.Clear();
         }
 
+        public void LoadFromSettings(string sectionName)
+        {
+            Clear();
+
+            var keyboardSettings = SettingsManager.Instance.GetSettings(sectionName);
+
+            foreach (var setting in keyboardSettings)
+            {
+                var controlType = setting.Name;
+                var controls = setting.Value.Split(',');
+                var state = setting.OtherAttributes["State"].ToEnum<KeyboardControlState>();
+
+                foreach (var control in controls)
+                {
+                    var controlKeyList = new List<Keys>();
+                    var controlKeys = control.Split('+');
+
+                    foreach (var key in controlKeys)
+                        controlKeyList.Add(key.ToEnum<Keys>());
+
+                    AddKeysControl(controlType, controlKeyList.ToArray(), state);
+                }
+            }
+        } // LoadFromSettings
+
         public void AddKeysControl(string name, Keys[] keys, KeyboardControlState state = KeyboardControlState.Released)
         {
             if (!_keyboardControls.ContainsKey(name))
