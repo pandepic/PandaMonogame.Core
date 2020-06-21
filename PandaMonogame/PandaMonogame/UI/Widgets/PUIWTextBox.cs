@@ -73,7 +73,7 @@ namespace PandaMonogame.UI
 
             _graphics.SetRenderTarget(backgroundTexture);
 
-            using (SpriteBatch spriteBatch = new SpriteBatch(_graphics))
+            using (var spriteBatch = new SpriteBatch(_graphics))
             {
                 _graphics.Clear(Color.Transparent);
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
@@ -153,14 +153,17 @@ namespace PandaMonogame.UI
             var temp = new RenderTarget2D(_graphics, (int)tSize.X, (int)tSize.Y);
 
             _graphics.SetRenderTarget(temp);
-            SpriteBatch spriteBatch = new SpriteBatch(_graphics);
-            _graphics.Clear(Color.Transparent);
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            spriteBatch.DrawString(_font, _text, Vector2.Zero, Colour);
+            using (var spriteBatch = new SpriteBatch(_graphics))
+            {
+                _graphics.Clear(Color.Transparent);
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            spriteBatch.End();
-            _graphics.SetRenderTarget(null);
+                spriteBatch.DrawString(_font, _text, Vector2.Zero, Colour);
+
+                spriteBatch.End();
+                _graphics.SetRenderTarget(null);
+            }
 
             _textTexture = (Texture2D)temp;
 
@@ -225,7 +228,7 @@ namespace PandaMonogame.UI
                         if (currentKeyState.IsKeyHeld(Keys.LeftControl) || currentKeyState.IsKeyHeld(Keys.RightControl))
                         {
                             var clipboard = TextCopy.Clipboard.GetText();
-                            
+
                             if (clipboard != null && clipboard.Length > 0)
                             {
                                 for (int i = 0; i < clipboard.Length; i++)

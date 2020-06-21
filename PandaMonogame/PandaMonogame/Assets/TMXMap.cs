@@ -99,44 +99,46 @@ namespace PandaMonogame
             RenderTarget2D texture = new RenderTarget2D(_graphics, Map.Width * Map.TileWidth, Map.Height * Map.TileHeight);
 
             _graphics.SetRenderTarget(texture);
-            SpriteBatch spriteBatch = new SpriteBatch(_graphics);
 
-            _graphics.Clear(Color.Transparent);
-
-            int x = 0;
-            int y = 0;
-
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-
-            foreach (var tile in layer.Tiles)
+            using (var spriteBatch = new SpriteBatch(_graphics))
             {
-                TMXTilesheet tilesheet = null;
+                _graphics.Clear(Color.Transparent);
 
-                foreach (var ts in this._tilesheets)
+                int x = 0;
+                int y = 0;
+
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+                foreach (var tile in layer.Tiles)
                 {
-                    if (tile.Gid >= ts.FirstGID && (ts.LastGID == -1 || tile.Gid <= ts.LastGID))
+                    TMXTilesheet tilesheet = null;
+
+                    foreach (var ts in this._tilesheets)
                     {
-                        tilesheet = ts;
+                        if (tile.Gid >= ts.FirstGID && (ts.LastGID == -1 || tile.Gid <= ts.LastGID))
+                        {
+                            tilesheet = ts;
+                        }
+                    }
+
+                    tilesheet.Sheet.SetFrame(tile.Gid);
+                    tilesheet.Sheet.Draw(spriteBatch, new Vector2(x, y));
+
+                    x += Map.TileWidth;
+
+                    if (x >= (Map.Width * Map.TileWidth))
+                    {
+                        x = 0;
+                        y += Map.TileHeight;
                     }
                 }
 
-                tilesheet.Sheet.SetFrame(tile.Gid);
-                tilesheet.Sheet.Draw(spriteBatch, new Vector2(x, y));
+                spriteBatch.End();
 
-                x += Map.TileWidth;
+                _graphics.SetRenderTarget(null);
 
-                if (x >= (Map.Width * Map.TileWidth))
-                {
-                    x = 0;
-                    y += Map.TileHeight;
-                }
+                return texture;
             }
-
-            spriteBatch.End();
-
-            _graphics.SetRenderTarget(null);
-
-            return texture;
-        }
+        } // BuildLayerTexture
     }
 }
