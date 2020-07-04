@@ -127,97 +127,103 @@ namespace PandaMonogame.UI
             if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Importing UI instance: " + assetName);
 
-            XDocument doc = XDocument.Load(ModManager.Instance.AssetManager.GetAssetPath(assetName));
-            XElement menuRoot = doc.Element("Menu");
-
-            XElement templatesRoot = null;
-
-            if (!string.IsNullOrWhiteSpace(templatesName))
+            using (var fs = ModManager.Instance.AssetManager.GetFileStreamByAsset(assetName))
             {
-                templatesRoot = XDocument.Load(ModManager.Instance.AssetManager.GetAssetPath(templatesName)).Element("Templates");
+                XDocument doc = XDocument.Load(fs);
+                XElement menuRoot = doc.Element("Menu");
 
-                foreach (var template in templatesRoot.Elements("Template"))
+                XElement templatesRoot = null;
+
+                if (!string.IsNullOrWhiteSpace(templatesName))
                 {
-                    var name = template.Attribute("TemplateName").Value;
-                    Templates.Add(name, template);
-                }
-            }
-
-            List<XElement> fontElements = menuRoot.Elements("Font").ToList();
-
-            foreach (var fontElement in fontElements)
-            {
-                _fonts.Add(fontElement.Attribute("AssetName").Value, ModManager.Instance.AssetManager.LoadDynamicSpriteFont(fontElement.Attribute("AssetName").Value));
-                if (PandaMonogameConfig.Logging)
-                    Console.WriteLine("New font: " + fontElement.Attribute("AssetName").Value);
-            }
-
-            List<XElement> scenes = menuRoot.Elements("Scene").ToList();
-            
-            foreach (var scene in scenes)
-            {
-                PUIScene newScene = new PUIScene(scene);
-
-                List<XElement> frames = scene.Elements("Frame").ToList();
-
-                foreach (var frame in frames)
-                {
-                    PUIFrame newFrame = new PUIFrame(graphics, this, frame, _fonts, HandleEvents, Templates);
-
-                    newScene.SceneFrames.Add(newFrame);
-
-                } // foreach
-
-                newScene.SceneFrames.OrderByDrawOrder();
-                Scenes.Add(scene.Attribute("Name").Value, newScene);
-            } // foreach
-
-            List<XElement> scripts = menuRoot.Elements("Script").ToList();
-
-            foreach (var script in scripts)
-            {
-                PUIScript newScript = new PUIScript(this)
-                {
-                    Name = script.Element("Name").Value,
-                    Filepath = ModManager.Instance.AssetManager.GetAssetPath(script.Element("AssetName").Value),
-                };
-
-                if (PandaMonogameConfig.Logging)
-                    Console.WriteLine("New script: " + newScript.Name + " - " + newScript.Filepath);
-
-                List<XElement> scriptClasses = script.Elements("Class").ToList();
-
-                foreach (var scriptClass in scriptClasses)
-                {
-                    newScript.Classes.Add(scriptClass.Attribute("Name").Value);
-                } // foreach
-
-                newScript.CreateScope();
-                newScript.Scope.SetVariable("MouseState", Mouse.GetState());
-                newScript.Scope.SetVariable("MenuState", this);
-
-                foreach (var scene in Scenes)
-                {
-                    var widgetScriptList = scene.Value.SceneFrames.GetWidgetScriptList();
-
-                    foreach (var s in widgetScriptList)
+                    using (var fsTemplates = ModManager.Instance.AssetManager.GetFileStreamByAsset(templatesName))
                     {
-                        newScript.Scope.SetVariable(scene.Key + "_" + s.Key, s.Value);
-                    }
+                        templatesRoot = XDocument.Load(fsTemplates).Element("Templates");
 
-                    foreach (var f in scene.Value.SceneFrames.GetFrameScriptList())
-                    {
-                        newScript.Scope.SetVariable(scene.Key + "_" + f.Key, f.Value);
+                        foreach (var template in templatesRoot.Elements("Template"))
+                        {
+                            var name = template.Attribute("TemplateName").Value;
+                            Templates.Add(name, template);
+                        }
                     }
                 }
 
-                newScript.Compile();
+                List<XElement> fontElements = menuRoot.Elements("Font").ToList();
 
-                Scripts.Add(newScript.Name, newScript);
-            } // foreach
+                foreach (var fontElement in fontElements)
+                {
+                    _fonts.Add(fontElement.Attribute("AssetName").Value, ModManager.Instance.AssetManager.LoadDynamicSpriteFont(fontElement.Attribute("AssetName").Value));
+                    if (PandaMonogameConfig.Logging)
+                        Console.WriteLine("New font: " + fontElement.Attribute("AssetName").Value);
+                }
 
-            if (PandaMonogameConfig.Logging)
-                Console.WriteLine("Finished importing UI instance: " + assetName);
+                List<XElement> scenes = menuRoot.Elements("Scene").ToList();
+
+                foreach (var scene in scenes)
+                {
+                    PUIScene newScene = new PUIScene(scene);
+
+                    List<XElement> frames = scene.Elements("Frame").ToList();
+
+                    foreach (var frame in frames)
+                    {
+                        PUIFrame newFrame = new PUIFrame(graphics, this, frame, _fonts, HandleEvents, Templates);
+
+                        newScene.SceneFrames.Add(newFrame);
+
+                    } // foreach
+
+                    newScene.SceneFrames.OrderByDrawOrder();
+                    Scenes.Add(scene.Attribute("Name").Value, newScene);
+                } // foreach
+
+                List<XElement> scripts = menuRoot.Elements("Script").ToList();
+
+                foreach (var script in scripts)
+                {
+                    PUIScript newScript = new PUIScript(this)
+                    {
+                        Name = script.Element("Name").Value,
+                        Filepath = ModManager.Instance.AssetManager.GetAssetPath(script.Element("AssetName").Value),
+                    };
+
+                    if (PandaMonogameConfig.Logging)
+                        Console.WriteLine("New script: " + newScript.Name + " - " + newScript.Filepath);
+
+                    List<XElement> scriptClasses = script.Elements("Class").ToList();
+
+                    foreach (var scriptClass in scriptClasses)
+                    {
+                        newScript.Classes.Add(scriptClass.Attribute("Name").Value);
+                    } // foreach
+
+                    newScript.CreateScope();
+                    newScript.Scope.SetVariable("MouseState", Mouse.GetState());
+                    newScript.Scope.SetVariable("MenuState", this);
+
+                    foreach (var scene in Scenes)
+                    {
+                        var widgetScriptList = scene.Value.SceneFrames.GetWidgetScriptList();
+
+                        foreach (var s in widgetScriptList)
+                        {
+                            newScript.Scope.SetVariable(scene.Key + "_" + s.Key, s.Value);
+                        }
+
+                        foreach (var f in scene.Value.SceneFrames.GetFrameScriptList())
+                        {
+                            newScript.Scope.SetVariable(scene.Key + "_" + f.Key, f.Value);
+                        }
+                    }
+
+                    newScript.Compile();
+
+                    Scripts.Add(newScript.Name, newScript);
+                } // foreach
+
+                if (PandaMonogameConfig.Logging)
+                    Console.WriteLine("Finished importing UI instance: " + assetName);
+            }
         } // load
 
         public void SetScriptScopeVariable(string name, object obj)

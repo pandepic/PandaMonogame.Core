@@ -59,50 +59,53 @@ namespace PandaMonogame
 
             Sections.Clear();
 
-            XDocument doc = XDocument.Load(filepath);
-            
-            XElement settingsRoot = doc.Element("Settings");
-            List<XElement> docSections = settingsRoot.Elements("Section").ToList();
-
-            foreach (var docSection in docSections)
+            using (var fs = ModManager.Instance.AssetManager.GetFileStream(filepath))
             {
-                SettingsSection section = new SettingsSection
+                XDocument doc = XDocument.Load(fs);
+
+                XElement settingsRoot = doc.Element("Settings");
+                List<XElement> docSections = settingsRoot.Elements("Section").ToList();
+
+                foreach (var docSection in docSections)
                 {
-                    Name = docSection.Attribute("Name").Value
-                };
-
-                if (PandaMonogameConfig.Logging)
-                    Console.WriteLine("Settings section [" + section.Name +"]");
-
-                List<XElement> sectionSettings = docSection.Elements("Setting").ToList();
-
-                foreach (var sectionSetting in sectionSettings)
-                {
-                    var newSetting = new Setting()
+                    SettingsSection section = new SettingsSection
                     {
-                        Name = sectionSetting.Attribute("Name").Value,
-                        Value = sectionSetting.Attribute("Value").Value,
-                        OtherAttributes = new Dictionary<string, string>(),
+                        Name = docSection.Attribute("Name").Value
                     };
 
-                    foreach (var att in sectionSetting.Attributes())
-                    {
-                        if (att.Name != "Name" && att.Name != "Value")
-                            newSetting.OtherAttributes.Add(att.Name.ToString(), att.Value);
-                    }
-
-                    section.Settings.Add(sectionSetting.Attribute("Name").Value, newSetting);
-
                     if (PandaMonogameConfig.Logging)
-                        Console.WriteLine("[" + section.Name + "] Setting added: " + newSetting.Name + " - " + newSetting.Value);
+                        Console.WriteLine("Settings section [" + section.Name + "]");
+
+                    List<XElement> sectionSettings = docSection.Elements("Setting").ToList();
+
+                    foreach (var sectionSetting in sectionSettings)
+                    {
+                        var newSetting = new Setting()
+                        {
+                            Name = sectionSetting.Attribute("Name").Value,
+                            Value = sectionSetting.Attribute("Value").Value,
+                            OtherAttributes = new Dictionary<string, string>(),
+                        };
+
+                        foreach (var att in sectionSetting.Attributes())
+                        {
+                            if (att.Name != "Name" && att.Name != "Value")
+                                newSetting.OtherAttributes.Add(att.Name.ToString(), att.Value);
+                        }
+
+                        section.Settings.Add(sectionSetting.Attribute("Name").Value, newSetting);
+
+                        if (PandaMonogameConfig.Logging)
+                            Console.WriteLine("[" + section.Name + "] Setting added: " + newSetting.Name + " - " + newSetting.Value);
+                    } // foreach
+
+                    Sections.Add(section.Name, section);
+
                 } // foreach
 
-                Sections.Add(section.Name, section);
-
-            } // foreach
-
-            if (PandaMonogameConfig.Logging)
-                Console.WriteLine("Finished importing settings: " + filepath);
+                if (PandaMonogameConfig.Logging)
+                    Console.WriteLine("Finished importing settings: " + filepath);
+            }
         } // load
 
         public void Save(string filepath)

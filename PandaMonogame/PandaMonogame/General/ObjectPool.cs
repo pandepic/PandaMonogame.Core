@@ -7,27 +7,31 @@ using System.Threading.Tasks;
 
 namespace PandaMonogame
 {
-    public class ObjectPool<T> where T : IPoolable, new()
+    public class ObjectPool<T> where T : class, IPoolable, new()
     {
         public const int DefaultPoolSize = 100;
-        public const int MaxGrowthLimit = int.MaxValue / 4;
+        public const int MaxGrowthLimit = 1000000;
 
-        protected T[] _objects;
+        public T[] Buffer;
         protected bool _disposable = false;
+        protected T _swapTemp;
 
-        public T[] Objects { get => _objects; }
-        public int Size { get => _objects.Length; }
+        protected int _lastActiveIndex = -1;
+        public int LastActiveIndex { get => _lastActiveIndex; }
+
+        public int Size { get => Buffer.Length; }
 
         public bool AllowResize { get; set; }
 
         public T this[int index]
         {
-            get => _objects[index];
+            get => Buffer[index];
         }
 
         public ObjectPool(int size = DefaultPoolSize, bool allowResize = false)
         {
-            _objects = new T[0];
+            AllowResize = allowResize;
+            Buffer = new T[0];
 
             if (typeof(T) is IDisposable)
                 _disposable = true;
@@ -41,50 +45,72 @@ namespace PandaMonogame
             {
                 for (var i = 0; i < Size; i++)
                 {
-                    ((IDisposable)_objects[i])?.Dispose();
+                    ((IDisposable)Buffer[i])?.Dispose();
                 }
             }
         }
 
         public void Clear()
         {
-            for (var i = 0; i < _objects.Length; i++)
-                Delete(i);
+            for (var i = 0; i < Buffer.Length; i++)
+            {
+                Buffer[i].IsAlive = false;
+            }
+
+            _lastActiveIndex = -1;
         }
 
         public void Delete(int poolIndex)
         {
-            _objects[poolIndex].ObjectAlive = false;
-            _objects[poolIndex].Delete();
+            if (!Buffer[poolIndex].IsAlive)
+                return;
+
+            Buffer[poolIndex].IsAlive = false;
+
+            _swapTemp = Buffer[poolIndex];
+            Buffer[poolIndex] = Buffer[_lastActiveIndex];
+            Buffer[_lastActiveIndex] = _swapTemp;
+            _swapTemp = null;
+            _lastActiveIndex -= 1;
         }
 
         public void Delete(T obj)
         {
-            Delete(obj.PoolIndex);
+            for (var i = 0; i <= _lastActiveIndex; i++)
+            {
+                if (ReferenceEquals(Buffer[i], obj))
+                {
+                    Delete(i);
+                    return;
+                }
+            }
+
+            throw new Exception("Couldn't delete object, wasn't found alive in pool.");
         }
 
         public T New(bool resize = true)
         {
-            for (var i = 0; i < Size; i++)
+            if ((_lastActiveIndex + 1) >= Size)
             {
-                T obj = _objects[i];
-                if (!obj.ObjectAlive)
+                if (AllowResize)
                 {
-                    obj.ObjectAlive = true;
-                    obj.New();
-                    return obj;
+                    var currentSize = Size;
+                    var newSize = currentSize * 2;
+                    AddObjects(newSize - currentSize);
+                    return New();
+                }
+                else
+                {
+                    return default;
                 }
             }
 
-            if (resize && AllowResize)
-            {
-                var currentSize = Size;
-                var newSize = currentSize * 2;
-                AddObjects(newSize - currentSize);
-                return New();
-            }
+            _lastActiveIndex += 1;
 
-            return default;
+            var newObject = Buffer[_lastActiveIndex];
+            newObject.IsAlive = true;
+            newObject.Reset();
+            return newObject;
         }
 
         protected void AddObjects(int count)
@@ -94,14 +120,13 @@ namespace PandaMonogame
 
             var newIndex = Size;
 
-            Array.Resize(ref _objects, Size + count);
+            Array.Resize(ref Buffer, Size + count);
 
             for (var i = 0; i < count; i++)
             {
                 var obj = new T();
-                obj.PoolIndex = newIndex;
-                obj.ObjectAlive = false;
-                _objects[newIndex] = obj;
+                obj.IsAlive = false;
+                Buffer[newIndex] = obj;
 
                 newIndex++;
             }
@@ -109,11 +134,9 @@ namespace PandaMonogame
 
         public IEnumerable<T> GetAlive()
         {
-            for (var i = 0; i < Size; i++)
+            for (var i = 0; i <= _lastActiveIndex; i++)
             {
-                var obj = _objects[i];
-                if (obj.ObjectAlive)
-                    yield return obj;
+                yield return Buffer[i];
             }
         }
 
@@ -121,7 +144,7 @@ namespace PandaMonogame
         {
             for (var i = 0; i < Size; i++)
             {
-                yield return _objects[i];
+                yield return Buffer[i];
             }
         }
 

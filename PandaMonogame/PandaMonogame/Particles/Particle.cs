@@ -19,9 +19,9 @@ namespace PandaMonogame.Particles
 
         #region IPoolable
         public int PoolIndex { get; set; }
-        public bool ObjectAlive { get; set; }
+        public bool IsAlive { get; set; }
 
-        public virtual void New()
+        public virtual void Reset()
         {
             Position = Vector2.Zero;
             Velocity = Vector2.Zero;

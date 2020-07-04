@@ -66,60 +66,63 @@ namespace PandaMonogame.WorldManager2DTile
 
         public void Load(GraphicsDevice graphics, ContentManager Content, string sheetsAssetName)
         {
-            XDocument doc = XDocument.Load(ModManager.Instance.AssetManager.GetAssetPath(sheetsAssetName));
-
-            XElement tilesheetsRoot = doc.Element("tilesheets");
-            XElement tileDimensions = tilesheetsRoot.Element("tiledimensions");
-
-            TileWidth = int.Parse(tileDimensions.Element("width").Value);
-            TileHeight = int.Parse(tileDimensions.Element("height").Value);
-
-            List<XElement> tilesheetElements = tilesheetsRoot.Elements("tilesheet").ToList();
-
-            foreach (var tilesheetElement in tilesheetElements)
+            using (var fs = ModManager.Instance.AssetManager.GetFileStreamByAsset(sheetsAssetName))
             {
-                int currentSheetIndex = 0;
+                XDocument doc = XDocument.Load(fs);
 
-                Tilesheet newSheet = new Tilesheet(ModManager.Instance.AssetManager.LoadTexture2D(graphics, tilesheetElement.Element("assetname").Value),
-                                                    TileWidth, TileHeight);
+                XElement tilesheetsRoot = doc.Element("tilesheets");
+                XElement tileDimensions = tilesheetsRoot.Element("tiledimensions");
 
-                newSheet.Name = tilesheetElement.Element("name").Value;
+                TileWidth = int.Parse(tileDimensions.Element("width").Value);
+                TileHeight = int.Parse(tileDimensions.Element("height").Value);
 
-                List<XElement> tileElements = tilesheetElement.Element("tiles").Elements("tile").ToList();
+                List<XElement> tilesheetElements = tilesheetsRoot.Elements("tilesheet").ToList();
 
-                int currentTileX = 0;
-                int currentTileY = 0;
-
-                foreach (var tileElement in tileElements)
+                foreach (var tilesheetElement in tilesheetElements)
                 {
-                    TileData newTile = new TileData()
+                    int currentSheetIndex = 0;
+
+                    Tilesheet newSheet = new Tilesheet(ModManager.Instance.AssetManager.LoadTexture2D(graphics, tilesheetElement.Element("assetname").Value),
+                                                        TileWidth, TileHeight);
+
+                    newSheet.Name = tilesheetElement.Element("name").Value;
+
+                    List<XElement> tileElements = tilesheetElement.Element("tiles").Elements("tile").ToList();
+
+                    int currentTileX = 0;
+                    int currentTileY = 0;
+
+                    foreach (var tileElement in tileElements)
                     {
-                        Name = tileElement.Attribute("name").Value,
-                        X = currentTileX,
-                        Y = currentTileY,
-                        SheetIndex = currentSheetIndex
-                    };
+                        TileData newTile = new TileData()
+                        {
+                            Name = tileElement.Attribute("name").Value,
+                            X = currentTileX,
+                            Y = currentTileY,
+                            SheetIndex = currentSheetIndex
+                        };
 
-                    newSheet.Tiles.Add(newTile.Name, newTile);
+                        newSheet.Tiles.Add(newTile.Name, newTile);
 
-                    currentSheetIndex += 1;
-                    currentTileX += TileWidth;
+                        currentSheetIndex += 1;
+                        currentTileX += TileWidth;
 
-                    if (currentTileX >= newSheet.TextureHandler.Width)
-                    {
-                        currentTileX = 0;
-                        currentTileY += TileHeight;
-                    }
+                        if (currentTileX >= newSheet.TextureHandler.Width)
+                        {
+                            currentTileX = 0;
+                            currentTileY += TileHeight;
+                        }
+                    } // foreach
+
+                    Tilesheets.Add(newSheet.Name, newSheet);
+
+                    if (PandaMonogameConfig.Logging)
+                        Console.WriteLine("Loaded tilesheet " + newSheet.Name + " with " + newSheet.Tiles.Count.ToString() + " tiles.");
                 } // foreach
 
-                Tilesheets.Add(newSheet.Name, newSheet);
-
                 if (PandaMonogameConfig.Logging)
-                    Console.WriteLine("Loaded tilesheet " + newSheet.Name + " with " + newSheet.Tiles.Count.ToString() + " tiles.");
-            } // foreach
-
-            if (PandaMonogameConfig.Logging)
-                Console.WriteLine("WorldManager loaded tilesheets from tilesheets.xml");
+                    Console.WriteLine("WorldManager loaded tilesheets from tilesheets.xml");
+            }
         } // load
 
         public void Generate(string scriptAssetName)

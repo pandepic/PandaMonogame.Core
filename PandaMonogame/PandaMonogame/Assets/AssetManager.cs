@@ -41,25 +41,28 @@ namespace PandaMonogame
             if (PandaMonogameConfig.Logging)
                 Console.WriteLine("Importing assets: " + filepath);
 
-            XDocument doc = XDocument.Load(filepath);
-
-            List<XElement> assetElements = doc.Root.Elements("Asset").ToList();
-
-            foreach (var asset in assetElements)
+            using (var fs = GetFileStream(filepath))
             {
-                string assetName = asset.Attribute("Name").Value;
-                string assetPath = (modPath.Length > 0 ? (modPath + "\\") : "") + asset.Attribute("FilePath").Value;
+                XDocument doc = XDocument.Load(fs);
 
-                if (_assets.ContainsKey(assetName) == false)
+                List<XElement> assetElements = doc.Root.Elements("Asset").ToList();
+
+                foreach (var asset in assetElements)
                 {
-                    _assets.Add(assetName, new Asset() { Name = assetName, Filepath = assetPath });
-                    if (PandaMonogameConfig.Logging)
-                        Console.WriteLine("Asset imported: " + assetName + " - " + assetPath);
-                }
-            }
+                    string assetName = asset.Attribute("Name").Value;
+                    string assetPath = (modPath.Length > 0 ? (modPath + "\\") : "") + asset.Attribute("FilePath").Value;
 
-            if (PandaMonogameConfig.Logging)
-                Console.WriteLine("Finished importing assets: " + filepath);
+                    if (_assets.ContainsKey(assetName) == false)
+                    {
+                        _assets.Add(assetName, new Asset() { Name = assetName, Filepath = assetPath });
+                        if (PandaMonogameConfig.Logging)
+                            Console.WriteLine("Asset imported: " + assetName + " - " + assetPath);
+                    }
+                }
+
+                if (PandaMonogameConfig.Logging)
+                    Console.WriteLine("Finished importing assets: " + filepath);
+            }
         }
 
         public void Clear()
@@ -85,10 +88,12 @@ namespace PandaMonogame
             return _assets[assetName].Filepath;
         }
 
-        public Stream GetFileStream(string path)
+        public Stream GetFileStream(string path, FileMode mode = FileMode.Open)
         {
+            // TODO : this doesn't currently support writing because of titlecontainer
+
             if (Path.IsPathRooted(path))
-                return File.OpenRead(path);
+                return File.Open(path, mode);
             else
                 return TitleContainer.OpenStream(path);
         }

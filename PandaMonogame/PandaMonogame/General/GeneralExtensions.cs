@@ -32,5 +32,6 @@ namespace PandaMonogame
         {
             return (T)Enum.Parse(typeof(T), str);
         }
+
     } // GeneralExtensions
 }

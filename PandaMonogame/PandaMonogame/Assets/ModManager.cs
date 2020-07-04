@@ -71,45 +71,48 @@ namespace PandaMonogame
         {
             _loadedMods.Clear();
 
-            XDocument modList = XDocument.Load(modDirectory + "\\" + modListFileName);
-
-            List<Mod> xmlMods = (from XElement mod in modList.Root.Elements("mod")
-                                 select new Mod()
-                                 {
-                                     Name = mod.Attribute("name").Value,
-                                     Ignore = bool.Parse(mod.Attribute("ignore").Value)
-                                 }).ToList();
-
-            _modDirectory = modDirectory;
-            _assetsFileName = assetsFileName;
-            _modListFileName = modListFileName;
-
-            List<string> modDirectories = Directory.GetDirectories(modDirectory).ToList();
-
-            foreach (var mod in xmlMods)
+            using (var fs = AssetManager.GetFileStream(modDirectory + "\\" + modListFileName))
             {
-                string modName = mod.Name.Replace(modDirectory + "\\", "");
-                string modPath = modDirectory + "\\" + modName;
+                XDocument modList = XDocument.Load(fs);
 
-                if (modDirectories.Contains(modPath) == true)
+                List<Mod> xmlMods = (from XElement mod in modList.Root.Elements("mod")
+                                     select new Mod()
+                                     {
+                                         Name = mod.Attribute("name").Value,
+                                         Ignore = bool.Parse(mod.Attribute("ignore").Value)
+                                     }).ToList();
+
+                _modDirectory = modDirectory;
+                _assetsFileName = assetsFileName;
+                _modListFileName = modListFileName;
+
+                List<string> modDirectories = Directory.GetDirectories(modDirectory).ToList();
+
+                foreach (var mod in xmlMods)
                 {
-                    _loadedMods.Add(mod);
-                } // if
-            } // foreach
+                    string modName = mod.Name.Replace(modDirectory + "\\", "");
+                    string modPath = modDirectory + "\\" + modName;
 
-            foreach (var mod in modDirectories)
-            {
-                string modName = mod.Replace(modDirectory + "\\", "");
+                    if (modDirectories.Contains(modPath) == true)
+                    {
+                        _loadedMods.Add(mod);
+                    } // if
+                } // foreach
 
-                if (_loadedMods.Where(m => m.Name == modName).Count() == 0)
+                foreach (var mod in modDirectories)
                 {
-                    _loadedMods.Add(new Mod()
+                    string modName = mod.Replace(modDirectory + "\\", "");
+
+                    if (_loadedMods.Where(m => m.Name == modName).Count() == 0)
+                    {
+                        _loadedMods.Add(new Mod()
                         {
                             Name = modName,
                             Ignore = false
                         });
-                } // if
-            } // foreach
+                    } // if
+                } // foreach
+            }
 
             SaveList();
 
