@@ -27,8 +27,6 @@ namespace PandaMonogame.Particles
             Velocity = Vector2.Zero;
             Duration = 0;
         }
-
-        public virtual void Delete() { }
         #endregion
 
         public virtual void Start(int maxDuration)
