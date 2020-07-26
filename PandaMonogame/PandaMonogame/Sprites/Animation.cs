@@ -6,7 +6,10 @@ namespace PandaMonogame
 {
     public class Animation
     {
+        public static readonly int NO_ENDFRAME = -1;
+
         public List<int> Frames { get; set; } = new List<int>();
+        public int EndFrame { get; set; } = NO_ENDFRAME;
         public float Duration { get; set; } = 0.0f;
         public string Name { get; set; } = "";
         public bool Paused { get; set; } = false;

@@ -88,14 +88,14 @@ namespace PandaMonogame
             return _assets[assetName].Filepath;
         }
 
-        public Stream GetFileStream(string path, FileMode mode = FileMode.Open)
+        public FileStream GetFileStream(string path, FileMode mode = FileMode.Open)
         {
             // TODO : this doesn't currently support writing because of titlecontainer
 
             if (Path.IsPathRooted(path))
                 return File.Open(path, mode);
             else
-                return TitleContainer.OpenStream(path);
+                return (FileStream)TitleContainer.OpenStream(path);
         }
 
         public Stream GetFileStreamByAsset(string assetName)

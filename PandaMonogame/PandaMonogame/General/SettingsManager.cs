@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -62,7 +63,6 @@ namespace PandaMonogame
             using (var fs = ModManager.Instance.AssetManager.GetFileStream(filepath))
             {
                 XDocument doc = XDocument.Load(fs);
-
                 XElement settingsRoot = doc.Element("Settings");
                 List<XElement> docSections = settingsRoot.Elements("Section").ToList();
 

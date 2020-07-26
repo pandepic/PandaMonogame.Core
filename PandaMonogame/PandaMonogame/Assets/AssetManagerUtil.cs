@@ -17,7 +17,7 @@ namespace PandaMonogame
                 colorBuffer[i] = Color.FromNonPremultiplied(colorBuffer[i].R, colorBuffer[i].G, colorBuffer[i].B, colorBuffer[i].A);
 
             newTexture.SetData(colorBuffer);
-
+            
             return newTexture;
         }
 

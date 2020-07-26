@@ -45,7 +45,7 @@ namespace PandaMonogame
             SetFrame(defaultFrame);
         }
 
-        public void PlayAnimation(Animation anim, int loopCount = -1)
+        public void PlayAnimation(Animation anim, int loopCount = LOOP_FOREVER)
         {
             if (anim.Frames.Count <= 0)
                 return;
@@ -58,6 +58,9 @@ namespace PandaMonogame
 
             _animationLoopCount = loopCount;
 
+            if (_animationLoopCount != LOOP_FOREVER)
+                _animationLoopCount -= 1;
+
             SetFrame((int)CurrentAnimation.Frames[CurrentFrameIndex]);
 
             this.SpriteEffectsFlip = anim.SpriteEffectsFlip;
@@ -65,9 +68,10 @@ namespace PandaMonogame
 
         public void StopAnimation()
         {
-            CurrentAnimation = null;
+            if (CurrentAnimation.EndFrame != Animation.NO_ENDFRAME)
+                SetFrame(CurrentAnimation.EndFrame);
 
-            SetFrame(1);
+            CurrentAnimation = null;
             SpriteEffectsFlip = SpriteEffects.None;
         }
 
@@ -106,8 +110,7 @@ namespace PandaMonogame
                         }
                         else if (_animationLoopCount <= 0)
                         {
-                            //setFrame(1);
-                            CurrentAnimation = null;
+                            StopAnimation();
                         }
                     }
                     else
