@@ -19,7 +19,7 @@ namespace PandaMonogame
 
         public void UpdatePosition(GameTime gameTime)
         {
-            float delta = (gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+            float delta = ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f);
 
             _position.X += _velocity.X * delta;
             _position.Y += _velocity.Y * delta;

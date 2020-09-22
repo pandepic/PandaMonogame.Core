@@ -189,8 +189,8 @@ namespace PandaMonogame
             if (!IsFlashing)
                 return;
 
-            _currentFlashInterval += gameTime.ElapsedGameTime.Milliseconds;
-            _totalFlashingTime += gameTime.ElapsedGameTime.Milliseconds;
+            _currentFlashInterval += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            _totalFlashingTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (_currentFlashInterval >= _flashingInterval)
             {
@@ -236,7 +236,7 @@ namespace PandaMonogame
             if (_scaleDirection == ScaleDirection.None)
                 return;
 
-            Scale += (_scaleChangePerSecond * ((float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f)) * (float)_scaleDirection;
+            Scale += (_scaleChangePerSecond * ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f)) * (float)_scaleDirection;
 
             if (_scaleDirection == ScaleDirection.ScaleUp && Scale >= _targetScale)
             {
@@ -279,7 +279,7 @@ namespace PandaMonogame
             if (_rotationDirection == RotationDirection.None)
                 return;
 
-            float change = _rotationChangePerSecond * ((float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+            float change = _rotationChangePerSecond * ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f);
 
             if (_rotationAmount - change < 0)
                 change = _rotationAmount;
@@ -323,7 +323,7 @@ namespace PandaMonogame
             if (_fadeDirection == FadeDirection.None)
                 return;
 
-            _fadeTransparency += (_fadeChangePerSecond * ((float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f)) * (float)_fadeDirection;
+            _fadeTransparency += (_fadeChangePerSecond * ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f)) * (float)_fadeDirection;
 
             if (_fadeDirection == FadeDirection.FadeIn && _fadeTransparency >= _targetTransparency)
             {

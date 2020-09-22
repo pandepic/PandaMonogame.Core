@@ -45,7 +45,7 @@ namespace PandaMonogame
 
         public void Update(GameTime gameTime)
         {
-            _currentTimePassed += (float)gameTime.ElapsedGameTime.Milliseconds;
+            _currentTimePassed += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             
             while (_currentTimePassed >= TimePerMinute)
             {

@@ -84,12 +84,12 @@ namespace PandaMonogame
         {
             if (Texture == null)
                 return;
-
+            
             base.Update(gameTime);
 
             if (CurrentAnimation != null)
             {
-                _currentFrameTime += (float)gameTime.ElapsedGameTime.Milliseconds;
+                _currentFrameTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
                 if (_currentFrameTime >= _timePerFrame)
                 {

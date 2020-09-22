@@ -27,3 +27,21 @@ namespace PandaMonogame
         public virtual void OnTextInput(TextInputEventArgs e, GameTime gameTime, CurrentKeyState currentKeyState) { }
     }
 }
+
+/*
+public override void Load(ContentManager Content, GraphicsDevice graphics) { }
+
+public override int Update(GameTime gameTime) { return -1; }
+
+public override void Draw(GameTime gameTime, GraphicsDevice graphics, SpriteBatch spriteBatch) { }
+
+public override void OnMouseMoved(Vector2 originalPosition, GameTime gameTime) { }
+public override void OnMouseDown(MouseButtonID button, GameTime gameTime) { }
+public override void OnMouseClicked(MouseButtonID button, GameTime gameTime) { }
+public override void OnMouseScroll(MouseScrollDirection direction, int scrollValue, GameTime gameTime) { }
+
+public override void OnKeyPressed(Keys key, GameTime gameTime, CurrentKeyState currentKeyState) { }
+public override void OnKeyReleased(Keys key, GameTime gameTime, CurrentKeyState currentKeyState) { }
+public override void OnKeyDown(Keys key, GameTime gameTime, CurrentKeyState currentKeyState) { }
+public override void OnTextInput(TextInputEventArgs e, GameTime gameTime, CurrentKeyState currentKeyState) { } 
+ */
