@@ -12,6 +12,7 @@ namespace PandaMonogame
     public class Mod
     {
         public string Name { get; set; }
+        public string Path { get; set; }
         public bool Ignore { get; set; }
     }
 
@@ -75,43 +76,26 @@ namespace PandaMonogame
             {
                 XDocument modList = XDocument.Load(fs);
 
-                List<Mod> xmlMods = (from XElement mod in modList.Root.Elements("mod")
+                List<Mod> xmlMods = (from XElement mod in modList.Root.Elements("Mod")
                                      select new Mod()
                                      {
-                                         Name = mod.Attribute("name").Value,
-                                         Ignore = bool.Parse(mod.Attribute("ignore").Value)
+                                         Name = mod.Attribute("Name").Value,
+                                         Path = mod.Attribute("Path").Value,
+                                         Ignore = bool.Parse(mod.Attribute("Ignore").Value)
                                      }).ToList();
 
                 _modDirectory = modDirectory;
                 _assetsFileName = assetsFileName;
                 _modListFileName = modListFileName;
 
-                List<string> modDirectories = Directory.GetDirectories(modDirectory).ToList();
-
                 foreach (var mod in xmlMods)
                 {
-                    string modName = mod.Name.Replace(modDirectory + "\\", "");
-                    string modPath = modDirectory + "\\" + modName;
+                    if (mod.Ignore)
+                        continue;
 
-                    if (modDirectories.Contains(modPath) == true)
-                    {
-                        _loadedMods.Add(mod);
-                    } // if
-                } // foreach
-
-                foreach (var mod in modDirectories)
-                {
-                    string modName = mod.Replace(modDirectory + "\\", "");
-
-                    if (_loadedMods.Where(m => m.Name == modName).Count() == 0)
-                    {
-                        _loadedMods.Add(new Mod()
-                        {
-                            Name = modName,
-                            Ignore = false
-                        });
-                    } // if
-                } // foreach
+                    _assetManager.Import(_modDirectory + "\\" + mod.Name + "\\" + _assetsFileName, _modDirectory + "\\" + mod.Path);
+                    _loadedMods.Add(mod);
+                }
             }
 
             SaveList();
@@ -122,13 +106,14 @@ namespace PandaMonogame
         {
             XDocument modListFile = new XDocument();
 
-            modListFile.Add(new XElement("mods"));
+            modListFile.Add(new XElement("Mods"));
 
             foreach (var mod in _loadedMods)
             {
-                XElement modElement = new XElement("mod");
-                modElement.SetAttributeValue("name", mod.Name);
-                modElement.SetAttributeValue("ignore", mod.Ignore.ToString());
+                XElement modElement = new XElement("Mod");
+                modElement.SetAttributeValue("Name", mod.Name);
+                modElement.SetAttributeValue("Path", mod.Path);
+                modElement.SetAttributeValue("Ignore", mod.Ignore.ToString());
 
                 modListFile.Root.Add(modElement);
             } // foreach

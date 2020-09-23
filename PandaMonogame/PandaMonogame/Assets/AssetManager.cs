@@ -52,11 +52,13 @@ namespace PandaMonogame
                     string assetName = asset.Attribute("Name").Value;
                     string assetPath = (modPath.Length > 0 ? (modPath + "\\") : "") + asset.Attribute("FilePath").Value;
 
-                    if (_assets.ContainsKey(assetName) == false)
+                    if (!_assets.ContainsKey(assetName))
                     {
                         _assets.Add(assetName, new Asset() { Name = assetName, Filepath = assetPath });
-                        if (PandaMonogameConfig.Logging)
-                            Console.WriteLine("Asset imported: " + assetName + " - " + assetPath);
+                    }
+                    else
+                    {
+                        _assets[assetName] = new Asset() { Name = assetName, Filepath = assetPath };
                     }
                 }
 
