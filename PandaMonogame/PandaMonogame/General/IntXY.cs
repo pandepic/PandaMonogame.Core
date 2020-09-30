@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace PandaMonogame
 {
-    public class IntXY
+    public struct IntXY
     {
         public int X { get; set; }
         public int Y { get; set; }
 
-        public IntXY() { }
         public IntXY(int x, int y) { X = x; Y = y; }
         public IntXY(Vector2 vector) { X = (int)vector.X; Y = (int)vector.Y; }
 
