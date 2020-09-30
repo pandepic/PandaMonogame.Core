@@ -74,7 +74,7 @@ namespace PandaMonogame
             }
         }
 
-        public void UpdateCellPosition(Vector2 position, T obj)
+        public bool UpdateCellPosition(Vector2 position, T obj)
         {
             var newCellPos = GetCellPosition(position);
 
@@ -87,7 +87,11 @@ namespace PandaMonogame
 
                 cell = GetGridCell(obj);
                 cell.Add(obj);
+
+                return true;
             }
+
+            return false;
         }
 
         public IntXY GetCellPosition(Vector2 position)
