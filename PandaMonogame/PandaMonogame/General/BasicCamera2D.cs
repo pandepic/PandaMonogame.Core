@@ -156,5 +156,10 @@ namespace PandaMonogame
             _position.X = _view.X;
             _position.Y = _view.Y;
         }
+
+        public Vector2 ScreenToWorldPosition(Vector2 pos)
+        {
+            return Vector2.Transform(pos, Matrix.Invert(GetViewMatrix()));
+        }
     }
 }

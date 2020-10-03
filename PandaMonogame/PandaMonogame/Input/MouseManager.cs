@@ -47,6 +47,12 @@ namespace PandaMonogame
 
         public MouseManager() { }
 
+        public static Vector2 GetMousePosition()
+        {
+            var mouseState = Mouse.GetState();
+            return new Vector2(mouseState.Position.X, mouseState.Position.Y);
+        }
+
         public void Update(GameTime gameTime)
         {
             _currentState = Mouse.GetState();
