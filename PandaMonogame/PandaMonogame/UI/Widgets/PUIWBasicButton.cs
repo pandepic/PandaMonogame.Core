@@ -41,6 +41,12 @@ namespace PandaMonogame.UI
         {
             Init(parent, el);
 
+            bool preMultiplyAlpha = false;
+
+            var elAlpha = GetXMLElement("PreMultiplyAlpha");
+            if (elAlpha != null)
+                preMultiplyAlpha = bool.Parse(elAlpha.Value);
+
             Texture2D buttonimage = null;
             Texture2D buttonimage_pressed = null;
             Texture2D buttonimage_hover = null;
@@ -52,13 +58,13 @@ namespace PandaMonogame.UI
             var elImageDisabled = GetXMLElement("AssetNameDisabled");
 
             if (elImage != null && string.IsNullOrWhiteSpace(elImage.Value) == false)
-                buttonimage = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, elImage.Value);
+                buttonimage = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, elImage.Value, preMultiplyAlpha);
             if (elImagePressed != null && string.IsNullOrWhiteSpace(elImagePressed.Value) == false)
-                buttonimage_pressed = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, elImagePressed.Value);
+                buttonimage_pressed = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, elImagePressed.Value, preMultiplyAlpha);
             if (elImageHover != null && string.IsNullOrWhiteSpace(elImageHover.Value) == false)
-                buttonimage_hover = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, elImageHover.Value);
+                buttonimage_hover = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, elImageHover.Value, preMultiplyAlpha);
             if (elImageDisabled != null && string.IsNullOrWhiteSpace(elImageDisabled.Value) == false)
-                buttonimage_disabled = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, elImageDisabled.Value);
+                buttonimage_disabled = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, elImageDisabled.Value, preMultiplyAlpha);
 
             XElement buttonLabelPosition = GetXMLElement("Label", "Position");
             XElement buttonLabelColor = GetXMLElement("Label", "Color");

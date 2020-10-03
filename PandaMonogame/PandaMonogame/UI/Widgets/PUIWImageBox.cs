@@ -20,7 +20,13 @@ namespace PandaMonogame.UI
         {
             Init(parent, el);
 
-            Texture2D texture = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, GetXMLElement("AssetName").Value);
+            bool preMultiplyAlpha = false;
+
+            var elAlpha = GetXMLElement("PreMultiplyAlpha");
+            if (elAlpha != null)
+                preMultiplyAlpha = bool.Parse(elAlpha.Value);
+
+            Texture2D texture = ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, GetXMLElement("AssetName").Value, preMultiplyAlpha);
 
             Width = texture.Width;
             Height = texture.Height;

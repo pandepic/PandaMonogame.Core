@@ -79,6 +79,12 @@ namespace PandaMonogame.UI
         {
             Init(parent, el);
 
+            bool preMultiplyAlpha = false;
+
+            var elAlpha = GetXMLElement("PreMultiplyAlpha");
+            if (elAlpha != null)
+                preMultiplyAlpha = bool.Parse(elAlpha.Value);
+
             var atStartValue = GetXMLAttribute("StartValue");
             var atMinValue = GetXMLAttribute("MinValue");
             var atMaxValue = GetXMLAttribute("MaxValue");
@@ -108,17 +114,17 @@ namespace PandaMonogame.UI
             var backgroundElRight = GetXMLElement("Background", "Right");
             var backgroundElCenter = GetXMLElement("Background", "Center");
 
-            var bgLeft = backgroundElLeft == null ? null : (string.IsNullOrWhiteSpace(backgroundElLeft.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, backgroundElLeft.Value));
-            var bgRight = backgroundElRight == null ? null : (string.IsNullOrWhiteSpace(backgroundElRight.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, backgroundElRight.Value));
-            var bgCenter = backgroundElCenter == null ? null : (string.IsNullOrWhiteSpace(backgroundElCenter.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, backgroundElCenter.Value));
+            var bgLeft = backgroundElLeft == null ? null : (string.IsNullOrWhiteSpace(backgroundElLeft.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, backgroundElLeft.Value, preMultiplyAlpha));
+            var bgRight = backgroundElRight == null ? null : (string.IsNullOrWhiteSpace(backgroundElRight.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, backgroundElRight.Value, preMultiplyAlpha));
+            var bgCenter = backgroundElCenter == null ? null : (string.IsNullOrWhiteSpace(backgroundElCenter.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, backgroundElCenter.Value, preMultiplyAlpha));
 
             var fillElLeft = GetXMLElement("Fill", "Left");
             var fillElRight = GetXMLElement("Fill", "Right");
             var fillElCenter = GetXMLElement("Fill", "Center");
 
-            _fillLeft = fillElLeft == null ? null : (string.IsNullOrWhiteSpace(fillElLeft.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, fillElLeft.Value));
-            _fillRight = fillElRight == null ? null : (string.IsNullOrWhiteSpace(fillElRight.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, fillElRight.Value));
-            _fillCenter = fillElCenter == null ? null : (string.IsNullOrWhiteSpace(fillElCenter.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, fillElCenter.Value));
+            _fillLeft = fillElLeft == null ? null : (string.IsNullOrWhiteSpace(fillElLeft.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, fillElLeft.Value, preMultiplyAlpha));
+            _fillRight = fillElRight == null ? null : (string.IsNullOrWhiteSpace(fillElRight.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, fillElRight.Value, preMultiplyAlpha));
+            _fillCenter = fillElCenter == null ? null : (string.IsNullOrWhiteSpace(fillElCenter.Value) ? null : ModManager.Instance.AssetManager.LoadTexture2D(parent.CommonWidgetResources.Graphics, fillElCenter.Value, preMultiplyAlpha));
 
             _backgroundWidth = int.Parse(GetXMLElement("Background", "Width").Value);
             _maxFillWidth = _backgroundWidth - (_fillOffsetX + _fillOffsetRight);
