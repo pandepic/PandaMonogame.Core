@@ -16,27 +16,27 @@ namespace PandaMonogame
         Down,
     }
 
-    public struct KeyboardGameControl
+    public struct KeyboardGameControl<T> where T : IConvertible
     {
-        public string Name;
+        public T Control;
         public Keys[] ControlKeys;
         public KeyboardControlState State;
 
-        public KeyboardGameControl(string name, Keys[] controlKeys, KeyboardControlState state)
+        public KeyboardGameControl(T control, Keys[] controlKeys, KeyboardControlState state)
         {
-            Name = name;
+            Control = control;
             ControlKeys = controlKeys;
             State = state;
         }
     }
 
-    public delegate void KEYCONTROL_EVENT(string name, GameTime gameTime, KeyboardControlState state);
+    public delegate void KEYCONTROL_EVENT<T>(T control, GameTime gameTime, KeyboardControlState state) where T : IConvertible;
 
-    public class GameControlsManager
+    public class GameControlsManager<T> where T : IConvertible
     {
-        protected Dictionary<string, List<KeyboardGameControl>> _keyboardControls = new Dictionary<string, List<KeyboardGameControl>>();
+        protected Dictionary<T, List<KeyboardGameControl<T>>> _keyboardControls = new Dictionary<T, List<KeyboardGameControl<T>>>();
 
-        public KEYCONTROL_EVENT OnGameKeyControl { get; set; } = null;
+        public KEYCONTROL_EVENT<T> OnGameKeyControl { get; set; } = null;
 
         public GameControlsManager()
         {
@@ -75,10 +75,12 @@ namespace PandaMonogame
 
         public void AddKeysControl(string name, Keys[] keys, KeyboardControlState state = KeyboardControlState.Released)
         {
-            if (!_keyboardControls.ContainsKey(name))
-                _keyboardControls.Add(name, new List<KeyboardGameControl>());
+            T nameKey = name.ToEnum<T>();
 
-            _keyboardControls[name].Add(new KeyboardGameControl(name, keys, state));
+            if (!_keyboardControls.ContainsKey(nameKey))
+                _keyboardControls.Add(nameKey, new List<KeyboardGameControl<T>>());
+
+            _keyboardControls[nameKey].Add(new KeyboardGameControl<T>(name.ToEnum<T>(), keys, state));
         }
 
         public void OnKeyPressed(Keys key, GameTime gameTime, CurrentKeyState currentKeyState)
@@ -112,7 +114,7 @@ namespace PandaMonogame
                     if (containsControlKey)
                     {
                         controlFound = true;
-                        OnGameKeyControl?.Invoke(gameControl.Name, gameTime, KeyboardControlState.Pressed);
+                        OnGameKeyControl?.Invoke(gameControl.Control, gameTime, KeyboardControlState.Pressed);
                     }
                 }
             }
@@ -158,7 +160,7 @@ namespace PandaMonogame
                     if (containsControlKey && releasedKeyFound)
                     {
                         controlFound = true;
-                        OnGameKeyControl?.Invoke(gameControl.Name, gameTime, KeyboardControlState.Released);
+                        OnGameKeyControl?.Invoke(gameControl.Control, gameTime, KeyboardControlState.Released);
                     }
                 }
             }
@@ -195,7 +197,7 @@ namespace PandaMonogame
                     if (containsControlKey)
                     {
                         controlFound = true;
-                        OnGameKeyControl?.Invoke(gameControl.Name, gameTime, KeyboardControlState.Down);
+                        OnGameKeyControl?.Invoke(gameControl.Control, gameTime, KeyboardControlState.Down);
                     }
                 }
             }

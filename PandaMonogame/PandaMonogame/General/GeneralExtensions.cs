@@ -61,5 +61,10 @@ namespace PandaMonogame
             }
         }
 
+        public static T GetLastItem<T>(this List<T> list)
+        {
+            return list[list.Count - 1];
+        }
+
     } // GeneralExtensions
 }
