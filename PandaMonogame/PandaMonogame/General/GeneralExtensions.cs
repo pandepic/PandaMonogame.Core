@@ -66,5 +66,10 @@ namespace PandaMonogame
             return list[list.Count - 1];
         }
 
+        public static bool ListCompare<T>(this List<T> list1, List<T> list2)
+        {
+            return list1.All(list2.Contains);
+        }
+
     } // GeneralExtensions
 }
