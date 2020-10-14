@@ -36,7 +36,7 @@ namespace PandaMonogame
         public SoundEffectPlaying(string assetName, bool looping, int type, float volume, SoundFormat format = SoundFormat.WAV, float pitch = 0f, float pan = 0f)
         {
             SoundEffect sfx = null;
-            
+
             if (format == SoundFormat.WAV)
                 sfx = ModManager.Instance.AssetManager.LoadSoundEffect(assetName);
             else if (format == SoundFormat.OGG)
