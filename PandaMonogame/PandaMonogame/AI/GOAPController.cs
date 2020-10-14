@@ -61,8 +61,10 @@ namespace PandaMonogame
             if (Result == null)
                 return false;
 
-            var goal = new GOAPGoal<T>(name);
-            goal.Result = Result;
+            var goal = new GOAPGoal<T>(name)
+            {
+                Result = Result
+            };
 
             if (TrySetGoalActions(goal))
             {
