@@ -22,6 +22,8 @@
     <PackageReference Include="ImGui.NET" Version="1.78.0" />
     <PackageReference Include="IronPython" Version="2.7.10" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+    <PackageReference Include="NAudio" Version="1.10.0" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.2.0" />
     <PackageReference Include="SpriteFontPlus" Version="0.7.6.34" />
     <PackageReference Include="TextCopy" Version="3.3.0" />
     <PackageReference Include="TiledSharp" Version="1.0.1" />

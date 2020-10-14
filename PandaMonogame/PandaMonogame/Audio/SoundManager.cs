@@ -4,6 +4,12 @@ using System.Linq;
 
 namespace PandaMonogame
 {
+    public enum SoundFormat
+    {
+        WAV,
+        OGG
+    }
+
     public class SoundEffectPlaying
     {
         public SoundState State
@@ -27,9 +33,15 @@ namespace PandaMonogame
             _instance?.Dispose();
         }
 
-        public SoundEffectPlaying(string assetName, bool looping, int type, float volume, float pitch = 0f, float pan = 0f)
+        public SoundEffectPlaying(string assetName, bool looping, int type, float volume, SoundFormat format = SoundFormat.WAV, float pitch = 0f, float pan = 0f)
         {
-            var sfx = ModManager.Instance.AssetManager.LoadSoundEffect(assetName);
+            SoundEffect sfx = null;
+            
+            if (format == SoundFormat.WAV)
+                sfx = ModManager.Instance.AssetManager.LoadSoundEffect(assetName);
+            else if (format == SoundFormat.OGG)
+                sfx = ModManager.Instance.AssetManager.LoadSoundEffectFromVorbis(assetName);
+
             _instance = sfx.CreateInstance();
             _instance.IsLooped = looping;
             _instance.Volume = volume;
@@ -86,7 +98,7 @@ namespace PandaMonogame
         /// <param name="loop">True if you want the sound to loop until manually stopped.</param>
         /// <param name="allowDuplicate">Do you want to allow multiple sounds from the same asset at the same time?</param>
         /// <returns>An integer sound ID on success or -1 on failure.</returns>
-        public int PlaySound(string assetName, int type, bool loop = false, bool allowDuplicate = false)
+        public int PlaySound(string assetName, int type, bool loop = false, SoundFormat format = SoundFormat.WAV, bool allowDuplicate = false)
         {
             if (!allowDuplicate)
             {
@@ -98,7 +110,7 @@ namespace PandaMonogame
             if (!_volumeSettings.ContainsKey(type))
                 _volumeSettings.Add(type, DefaultVolume);
 
-            var sfx = new SoundEffectPlaying(assetName, loop, type, _volumeSettings[type]);
+            var sfx = new SoundEffectPlaying(assetName, loop, type, _volumeSettings[type], format);
             sfx.Play();
 
             var sfxID = _nextID;

@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using NAudio.Vorbis;
+using NAudio.Wave;
 using SpriteFontPlus;
 using System;
 using System.Collections.Generic;
@@ -127,6 +129,28 @@ namespace PandaMonogame
                     var sfx = SoundEffect.FromStream(fs);
                     _assetCache.Add(assetName, sfx);
                     _disposableAssets.Add(assetName, sfx);
+                }
+            }
+
+            return (SoundEffect)_assetCache[assetName];
+        }
+
+        public SoundEffect LoadSoundEffectFromVorbis(string assetName)
+        {
+            if (!_assetCache.ContainsKey(assetName))
+            {
+                using (var fs = GetFileStreamByAsset(assetName))
+                {
+                    using (var vorbis = new VorbisWaveReader(fs))
+                    using (var outputStream = new MemoryStream())
+                    {
+                        WaveFileWriter.WriteWavFileToStream(outputStream, vorbis);
+                        outputStream.Position = 0;
+
+                        var sfx = SoundEffect.FromStream(outputStream);
+                        _assetCache.Add(assetName, sfx);
+                        _disposableAssets.Add(assetName, sfx);
+                    }
                 }
             }
 
