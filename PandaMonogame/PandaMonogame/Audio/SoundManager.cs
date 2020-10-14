@@ -40,7 +40,7 @@ namespace PandaMonogame
             if (format == SoundFormat.WAV)
                 sfx = ModManager.Instance.AssetManager.LoadSoundEffect(assetName);
             else if (format == SoundFormat.OGGVorbis)
-                sfx = ModManager.Instance.AssetManager.LoadSoundEffectFromVorbis(assetName);
+                sfx = ModManager.Instance.AssetManager.LoadSoundEffectFromOGGVorbis(assetName);
 
             _instance = sfx.CreateInstance();
             _instance.IsLooped = looping;

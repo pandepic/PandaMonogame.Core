@@ -135,7 +135,7 @@ namespace PandaMonogame
             return (SoundEffect)_assetCache[assetName];
         }
 
-        public SoundEffect LoadSoundEffectFromVorbis(string assetName)
+        public SoundEffect LoadSoundEffectFromOGGVorbis(string assetName)
         {
             if (!_assetCache.ContainsKey(assetName))
             {
