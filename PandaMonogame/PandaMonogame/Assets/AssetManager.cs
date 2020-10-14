@@ -142,12 +142,12 @@ namespace PandaMonogame
                 using (var fs = GetFileStreamByAsset(assetName))
                 {
                     using (var vorbis = new VorbisWaveReader(fs))
-                    using (var outputStream = new MemoryStream())
+                    using (var wavStream = new MemoryStream())
                     {
-                        WaveFileWriter.WriteWavFileToStream(outputStream, vorbis);
-                        outputStream.Position = 0;
+                        WaveFileWriter.WriteWavFileToStream(wavStream, vorbis);
+                        wavStream.Position = 0;
 
-                        var sfx = SoundEffect.FromStream(outputStream);
+                        var sfx = SoundEffect.FromStream(wavStream);
                         _assetCache.Add(assetName, sfx);
                         _disposableAssets.Add(assetName, sfx);
                     }

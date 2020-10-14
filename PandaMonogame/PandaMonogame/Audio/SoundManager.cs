@@ -7,7 +7,7 @@ namespace PandaMonogame
     public enum SoundFormat
     {
         WAV,
-        OGG
+        OGGVorbis
     }
 
     public class SoundEffectPlaying
@@ -39,7 +39,7 @@ namespace PandaMonogame
 
             if (format == SoundFormat.WAV)
                 sfx = ModManager.Instance.AssetManager.LoadSoundEffect(assetName);
-            else if (format == SoundFormat.OGG)
+            else if (format == SoundFormat.OGGVorbis)
                 sfx = ModManager.Instance.AssetManager.LoadSoundEffectFromVorbis(assetName);
 
             _instance = sfx.CreateInstance();
