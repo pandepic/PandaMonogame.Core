@@ -6,60 +6,60 @@ namespace PandaMonogame
 {
     public class SpriteList
     {
-        protected List<Sprite> sprites;
+        protected List<Sprite> _sprites;
 
         public SpriteList()
         {
-            sprites = new List<Sprite>();
+            _sprites = new List<Sprite>();
         }
 
         public Sprite this[int index]
         {
             get
             {
-                return sprites[index];
+                return _sprites[index];
             }
 
             set
             {
-                sprites[index] = value;
+                _sprites[index] = value;
             }
         }
 
         public void Add(Sprite sprite)
         {
-            sprites.Add(sprite);
+            _sprites.Add(sprite);
         }
 
         public void Remove(int index)
         {
-            sprites.Remove(sprites[index]);
+            _sprites.Remove(_sprites[index]);
         }
 
         public void Remove(Sprite sprite)
         {
-            sprites.Remove(sprite);
+            _sprites.Remove(sprite);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var sprite in sprites)
+            for (int i = 0; i < _sprites.Count; i++)
             {
-                sprite.Draw(spriteBatch);
+                _sprites[i].Draw(spriteBatch);
             }
         }
 
         public void Update(GameTime gameTime)
         {
-            for (int i = 0; i < sprites.Count; i++)
+            for (int i = 0; i < _sprites.Count; i++)
             {
-                sprites[i].Update(gameTime);
+                _sprites[i].Update(gameTime);
             }
         }
 
         public void Clear()
         {
-            sprites.Clear();
+            _sprites.Clear();
         }
     }
 }
