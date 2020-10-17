@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PandaMonogame
 {
-    public class GOAPAction<T> where T : Enum
+    public class GOAPAction<T>
     {
         public string Name { get; set; }
         public List<T> Requires { get; set; }
@@ -22,7 +22,7 @@ namespace PandaMonogame
         }
     }
 
-    public class GOAPGoal<T> where T : Enum
+    public class GOAPGoal<T>
     {
         public string Name { get; set; }
         public GOAPAction<T> Result { get; set; }
@@ -35,7 +35,7 @@ namespace PandaMonogame
         }
     }
 
-    public class GOAPController<T> where T : Enum
+    public class GOAPController<T>
     {
         public List<GOAPAction<T>> AvailableActions { get; set; }
         public GOAPGoal<T> CurrentGoal { get; set; }
@@ -43,6 +43,11 @@ namespace PandaMonogame
         public GOAPController()
         {
             AvailableActions = new List<GOAPAction<T>>();
+        }
+
+        public GOAPController(List<GOAPAction<T>> availableActions)
+        {
+            AvailableActions = availableActions;
         }
 
         public bool TrySetGoal(List<T> Request, string name)

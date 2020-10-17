@@ -9,6 +9,8 @@ namespace PandaMonogame
 {
     public static class GeneralExtensions
     {
+        private static FastRandom _rng = new FastRandom();
+
         public static void AddSet<TKey, TValue>(this Dictionary<TKey, TValue> d, TKey key, TValue value)
         {
             if (!d.ContainsKey(key))
@@ -38,7 +40,7 @@ namespace PandaMonogame
         public static T GetRandomItem<T>(this List<T> list, FastRandom rng = null)
         {
             if (rng == null)
-                rng = new FastRandom();
+                rng = _rng;
 
             return list[rng.Next(0, list.Count)];
         }
@@ -48,7 +50,7 @@ namespace PandaMonogame
         public static void Shuffle<T>(this List<T> list, FastRandom rng = null)
         {
             if (rng == null)
-                rng = new FastRandom();
+                rng = _rng;
 
             int n = list.Count;
             while (n > 1)
