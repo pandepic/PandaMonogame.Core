@@ -75,6 +75,39 @@ namespace PandaMonogame
             _assetCache.Clear();
         }
 
+        public void ClearNonSound()
+        {
+            var removeAssets = new List<string>();
+
+            foreach (var kvp in _assetCache)
+            {
+                if (!(kvp.Value is SoundEffect))
+                    removeAssets.Add(kvp.Key);
+            }
+
+            foreach (var asset in removeAssets)
+                _assetCache.Remove(asset);
+
+            DisposeNonSound();
+        } // ClearNonSound
+
+        public void DisposeNonSound()
+        {
+            var disposeAssets = new List<string>();
+
+            foreach (var kvp in _disposableAssets)
+            {
+                if (!(kvp.Value is SoundEffect))
+                    disposeAssets.Add(kvp.Key);
+            }
+
+            foreach (var asset in disposeAssets)
+            {
+                _disposableAssets[asset]?.Dispose();
+                _disposableAssets.Remove(asset);
+            }
+        } // DisposeNonSound
+
         public void DisposeAssets()
         {
             SoundManager?.StopAll();
@@ -85,7 +118,7 @@ namespace PandaMonogame
             }
 
             _disposableAssets.Clear();
-        }
+        } // DisposeAssets
 
         public string GetAssetPath(string assetName)
         {
