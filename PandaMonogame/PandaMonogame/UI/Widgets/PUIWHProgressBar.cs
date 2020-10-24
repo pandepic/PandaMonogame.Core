@@ -168,7 +168,7 @@ namespace PandaMonogame.UI
                 spriteBatch.End();
             }
 
-            parent.CommonWidgetResources.Graphics.SetRenderTarget(null);
+            parent.CommonWidgetResources.Graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
 
             _background = new AnimatedSprite(backgroundTexture, backgroundTexture.Width, backgroundTexture.Height);
 
@@ -265,7 +265,7 @@ namespace PandaMonogame.UI
                 spriteBatch.End();
             }
 
-            Parent.CommonWidgetResources.Graphics.SetRenderTarget(null);
+            Parent.CommonWidgetResources.Graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
 
             _fill = new AnimatedSprite(fillTexture, fillTexture.Width, fillTexture.Height);
 

@@ -141,7 +141,7 @@ namespace PandaMonogame.UI
                 spriteBatch.End();
             }
 
-            parent.CommonWidgetResources.Graphics.SetRenderTarget(null);
+            parent.CommonWidgetResources.Graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
 
             var atStartValue = GetXMLAttribute("StartValue");
             var atMinValue = GetXMLAttribute("MinValue");

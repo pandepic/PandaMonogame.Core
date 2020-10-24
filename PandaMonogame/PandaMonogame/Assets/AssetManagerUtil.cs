@@ -33,7 +33,7 @@ namespace PandaMonogame
                 spriteBatch.Draw(texture, Vector2.Zero, new Rectangle(0, 0, scaledTexture.Width, scaledTexture.Height), Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
                 spriteBatch.End();
             }
-            graphics.SetRenderTarget(null);
+            graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
 
             return scaledTexture;
         }

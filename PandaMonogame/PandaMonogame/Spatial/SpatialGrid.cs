@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace PandaMonogame
@@ -94,16 +95,19 @@ namespace PandaMonogame
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public IntXY GetCellPosition(Vector2 position)
         {
             return new IntXY((int)position.X / CellWidth, (int)position.Y / CellHeight);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public SpatialGridCell<T> GetGridCell(T obj)
         {
             return Grid[obj.SpatialCellPosition.X + GridWidth * obj.SpatialCellPosition.Y];
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public List<T> GetGridCellObjects(int x, int y)
         {
             return Grid[x + GridWidth * y].CellObjects;

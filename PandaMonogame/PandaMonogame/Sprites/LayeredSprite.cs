@@ -90,7 +90,7 @@ namespace PandaMonogame
                 spriteBatch.End();
             }
 
-            graphics.SetRenderTarget(null);
+            graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
 
             _layeredCache.Add(cacheName, Texture);
         }

@@ -108,7 +108,7 @@ namespace PandaMonogame.UI
                 spriteBatch.End();
             }
 
-            _graphics.SetRenderTarget(null);
+            _graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
 
             _background = new AnimatedSprite(backgroundTexture, backgroundTexture.Width, backgroundTexture.Height);
 
@@ -126,7 +126,7 @@ namespace PandaMonogame.UI
             var cursorTexture = new RenderTarget2D(_graphics, 2, textureCenter.Height - (_cursorPadding * 2));
             _graphics.SetRenderTarget(cursorTexture);
             _graphics.Clear(Colour);
-            _graphics.SetRenderTarget(null);
+            _graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
 
             _cursor = new Sprite(cursorTexture)
             {
@@ -162,7 +162,7 @@ namespace PandaMonogame.UI
                 spriteBatch.DrawString(_font, _text, Vector2.Zero, Colour);
 
                 spriteBatch.End();
-                _graphics.SetRenderTarget(null);
+                _graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
             }
 
             _textTexture = (Texture2D)temp;

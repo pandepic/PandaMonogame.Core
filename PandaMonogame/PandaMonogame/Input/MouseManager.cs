@@ -50,7 +50,22 @@ namespace PandaMonogame
         public static Vector2 GetMousePosition()
         {
             var mouseState = Mouse.GetState();
-            return new Vector2(mouseState.Position.X, mouseState.Position.Y);
+            var mousePos = new Vector2(mouseState.Position.X, mouseState.Position.Y);
+
+            if (GraphicsGlobals.CurrentFixedResolutionTarget != null)
+            {
+                var targetRect = GraphicsGlobals.CurrentFixedResolutionTarget.TargetRect;
+                var offset = targetRect.Location.ToVector2();
+                var size = targetRect.Size.ToVector2();
+                var windowSize = new Vector2(GraphicsGlobals.GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsGlobals.GraphicsDevice.PresentationParameters.BackBufferHeight);
+
+                mousePos -= offset;
+
+                mousePos.X = mousePos.X / (windowSize.X / size.X);
+                mousePos.Y = mousePos.Y / (windowSize.Y / size.Y);
+            }
+
+            return mousePos;
         }
 
         public void Update(GameTime gameTime)

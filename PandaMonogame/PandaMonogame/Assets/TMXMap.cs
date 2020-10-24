@@ -135,7 +135,7 @@ namespace PandaMonogame
 
                 spriteBatch.End();
 
-                _graphics.SetRenderTarget(null);
+                _graphics.SetRenderTarget(GraphicsGlobals.DefaultRenderTarget);
 
                 return texture;
             }

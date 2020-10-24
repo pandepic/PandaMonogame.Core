@@ -118,8 +118,8 @@ namespace PandaMonogame.UI
 
         public PUIFrame(GraphicsDevice graphics, PUIMenu parent, XElement el, Dictionary<string, DynamicSpriteFont> fonts, BASICEVENT_FUNC handleEvents, Dictionary<string, XElement> templates)
         {
-            var screenWidth = graphics.PresentationParameters.BackBufferWidth;
-            var screenHeight = graphics.PresentationParameters.BackBufferHeight;
+            var screenWidth = GraphicsGlobals.TargetResolutionWidth;
+            var screenHeight = GraphicsGlobals.TargetResolutionHeight;
 
             _parent = parent;
             Templates = templates;
