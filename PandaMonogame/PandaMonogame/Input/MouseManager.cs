@@ -130,11 +130,10 @@ namespace PandaMonogame
 
             if (_currentState.ScrollWheelValue != _previousState.ScrollWheelValue)
             {
-                var scrollValue = _currentState.ScrollWheelValue - _previousState.ScrollWheelValue;
                 var direction = MouseScrollDirection.Up;
                 if ((_currentState.ScrollWheelValue - _previousState.ScrollWheelValue) < 0)
                     direction = MouseScrollDirection.Down;
-
+                
                 OnMouseScroll?.Invoke(direction, _currentState.ScrollWheelValue, gameTime);
             }
 
